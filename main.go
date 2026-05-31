@@ -1,11 +1,13 @@
 package main
 
 import (
+	"go_final_project/pkg/api"
 	"log"
 	"net/http"
 )
 
 func main() {
+	api.Init()
 	fs := http.FileServer(http.Dir("./web"))
 
 	http.Handle("/", fs)

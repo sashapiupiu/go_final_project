@@ -2,11 +2,13 @@ package main
 
 import (
 	"go_final_project/pkg/api"
+	"go_final_project/pkg/db"
 	"log"
 	"net/http"
 )
 
 func main() {
+	db.Init("scheduler.db")
 	api.Init()
 	fs := http.FileServer(http.Dir("./web"))
 

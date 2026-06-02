@@ -9,7 +9,7 @@ import (
 
 const DateLayout = "20060102"
 
-func afterNow(a, b time.Time) bool {
+func AfterNow(a, b time.Time) bool {
 	a = time.Date(a.Year(), a.Month(), a.Day(), 0, 0, 0, 0, a.Location())
 	b = time.Date(b.Year(), b.Month(), b.Day(), 0, 0, 0, 0, b.Location())
 
@@ -23,14 +23,14 @@ func NextDate(now time.Time, date string, repeat string) (string, error) {
 	}
 
 	if repeat == "" {
-		return "", errors.New("empty repeat")
+		return "", errors.New("empty")
 	}
 
 	if repeat == "y" {
 		for {
 			t = t.AddDate(1, 0, 0)
 
-			if afterNow(t, now) {
+			if AfterNow(t, now) {
 				break
 			}
 		}
@@ -60,7 +60,7 @@ func NextDate(now time.Time, date string, repeat string) (string, error) {
 	for {
 		t = t.AddDate(0, 0, interval)
 
-		if afterNow(t, now) {
+		if AfterNow(t, now) {
 			break
 		}
 	}

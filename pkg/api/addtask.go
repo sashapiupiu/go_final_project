@@ -103,8 +103,4 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, IdResponse{
 		ID: strconv.FormatInt(id, 10),
 	})
-	func writeJSON(w http.ResponseWriter, data any) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	json.NewEncoder(w).Encode(data)
-}
 }

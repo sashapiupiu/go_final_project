@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -99,6 +100,8 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+
+	log.Println("addTaskHandler create task id:", id)
 
 	writeJSON(w, IdResponse{
 		ID: strconv.FormatInt(id, 10),

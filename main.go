@@ -8,8 +8,9 @@ import (
 )
 
 func main() {
-	db.Init("scheduler.db")
 	api.Init()
+	db.Init("scheduler.db")
+
 	fs := http.FileServer(http.Dir("./web"))
 
 	http.Handle("/", fs)

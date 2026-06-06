@@ -1,15 +1,20 @@
 package main
 
 import (
-	"go_final_project/pkg/api"
-	"go_final_project/pkg/db"
 	"log"
 	"net/http"
+
+	"go_final_project/pkg/api"
+	"go_final_project/pkg/db"
 )
 
 func main() {
+
+	err := db.Init("scheduler.db")
+	if err != nil {
+		log.Fatal(err)
+	}
 	api.Init()
-	db.Init("scheduler.db")
 
 	fs := http.FileServer(http.Dir("./web"))
 
@@ -17,7 +22,7 @@ func main() {
 
 	log.Println("start server :7540")
 
-	err := http.ListenAndServe(":7540", nil)
+	err = http.ListenAndServe(":7540", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,12 +1,11 @@
 package api
 
 import (
-	"log"
 	"net/http"
 )
 
 func taskHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("taskHandler:", r.Method)
+
 	switch r.Method {
 	case http.MethodGet:
 		getTaskHandler(w, r)

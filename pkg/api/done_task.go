@@ -27,14 +27,14 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if task.Repeat == "" {
 		err = db.DeleteTask(id)
 	} else {
-		next, err2 := repeat.NextDate(
+		next, err := repeat.NextDate(
 			time.Now(),
 			task.Date,
 			task.Repeat,
 		)
-		if err2 != nil {
+		if err != nil {
 			writeJSON(w, ErrorResponse{
-				Error: err2.Error(),
+				Error: err.Error(),
 			})
 			return
 		}

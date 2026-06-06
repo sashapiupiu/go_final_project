@@ -2,8 +2,9 @@ package db
 
 import (
 	"fmt"
-	"go_final_project/pkg/repeat"
 	"time"
+
+	"go_final_project/pkg/repeat"
 )
 
 type Task struct {
@@ -14,18 +15,12 @@ type Task struct {
 	Repeat  string `json:"repeat"`
 }
 
-// query := `
-// SELECT id, date, title, comment, repeat
-// FROM scheduler
-// WHERE date >= ?  или тудэй?
-// ORDER BY date
-// LIMIT ?
-// `
 func Tasks(limit int) ([]*Task, error) {
 	rows, err := DB.Query(`
 		SELECT id, date, title, comment, repeat
 		FROM scheduler
 		ORDER BY date
+		LIMIT ?
 	`)
 	if err != nil {
 		return nil, err
@@ -37,7 +32,17 @@ func Tasks(limit int) ([]*Task, error) {
 
 	for rows.Next() {
 		var t Task
-		rows.Scan(&t.ID, &t.Date, &t.Title, &t.Comment, &t.Repeat)
+
+		err := rows.Scan(
+			&t.ID,
+			&t.Date,
+			&t.Title,
+			&t.Comment,
+			&t.Repeat,
+		)
+		if err != nil {
+			return nil, err
+		}
 
 		taskDate, err := time.Parse("20060102", t.Date)
 		if err != nil {
@@ -56,6 +61,10 @@ func Tasks(limit int) ([]*Task, error) {
 				result = append(result, &t)
 			}
 		}
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return result, nil
@@ -82,7 +91,6 @@ func GetTask(id string) (*Task, error) {
 }
 
 func UpdateTask(task *Task) error {
-	// параметры пропущены, не забудьте указать WHERE
 	query := `
 		UPDATE scheduler
 		SET date = ?, title = ?, comment = ?, repeat = ?
@@ -98,8 +106,7 @@ func UpdateTask(task *Task) error {
 	if err != nil {
 		return err
 	}
-	// метод RowsAffected() возвращает количество записей к которым
-	// была применена SQL команда
+
 	count, err := res.RowsAffected()
 	if err != nil {
 		return err
@@ -149,4 +156,25 @@ func UpdateDate(next, id string) error {
 	}
 
 	return nil
+}
+func AddTask(task *Task) (int64, error) {
+	query := `
+		INSERT INTO scheduler
+		(date, title, comment, repeat)
+		VALUES (?, ?, ?, ?)
+	`
+
+	res, err := DB.Exec(
+		query,
+		task.Date,
+		task.Title,
+		task.Comment,
+		task.Repeat,
+	)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return res.LastInsertId()
 }

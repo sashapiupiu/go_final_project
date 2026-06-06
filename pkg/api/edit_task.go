@@ -2,8 +2,9 @@ package api
 
 import (
 	"encoding/json"
-	"go_final_project/pkg/db"
 	"net/http"
+
+	"go_final_project/pkg/db"
 )
 
 var task db.Task

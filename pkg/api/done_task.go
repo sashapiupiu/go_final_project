@@ -3,6 +3,7 @@ package api
 import (
 	"go_final_project/pkg/db"
 	"go_final_project/pkg/repeat"
+	"log"
 	"net/http"
 	"time"
 )
@@ -12,7 +13,10 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", "POST")
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		w.Write([]byte("405 Method Not Allowed"))
+		_, err := w.Write([]byte("405 Method Not Allowed"))
+		if err != nil {
+			log.Println("failed write HTTP reply:", "405 Method Not Allowed")
+		}
 		return
 	}
 

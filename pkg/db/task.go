@@ -17,7 +17,6 @@ func Tasks(limit int) ([]*Task, error) {
 		SELECT id, date, title, comment, repeat
 		FROM scheduler
 		ORDER BY date
-		LIMIT ?
 	`)
 	if err != nil {
 		return nil, err

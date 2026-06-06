@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -21,8 +22,11 @@ type IdResponse struct {
 
 func writeJSON(w http.ResponseWriter, data any, responseCode int) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-w.WriteHeader(responseCode)
-	err := 	json.NewEncoder(w).Encode(data)
+	w.WriteHeader(responseCode)
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		log.Println("failed encode data:", data)
+	}
 }
 
 func afterNow(a, b time.Time) bool {

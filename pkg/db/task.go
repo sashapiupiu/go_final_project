@@ -2,10 +2,6 @@ package db
 
 import (
 	"fmt"
-	"time"
-
-	"go_final_project/pkg/consts"
-	"go_final_project/pkg/repeat"
 )
 
 type Task struct {
@@ -28,7 +24,6 @@ func Tasks(limit int) ([]*Task, error) {
 	}
 	defer rows.Close()
 
-	now := time.Now()
 	result := make([]*Task, 0)
 
 	for rows.Next() {
@@ -45,23 +40,8 @@ func Tasks(limit int) ([]*Task, error) {
 			return nil, err
 		}
 
-		taskDate, err := time.Parse(consts.DateLayout, t.Date)
-		if err != nil {
-			continue
-		}
+		result = append(result, &t)
 
-		if taskDate.After(now) {
-			result = append(result, &t)
-			continue
-		}
-
-		if t.Repeat != "" {
-			next, err := repeat.NextDate(now, t.Date, t.Repeat)
-			if err == nil {
-				t.Date = next
-				result = append(result, &t)
-			}
-		}
 	}
 
 	if err := rows.Err(); err != nil {

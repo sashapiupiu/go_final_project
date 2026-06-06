@@ -10,6 +10,17 @@ import (
 )
 
 func NextDateHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", "GET")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		_, err := w.Write([]byte(http.StatusText(http.StatusMethodNotAllowed)))
+		if err != nil {
+			log.Println("failed write HTTP reply:", http.StatusText(http.StatusMethodNotAllowed))
+		}
+
+		return
+	}
+
 	nowStr := r.FormValue("now")
 	date := r.FormValue("date")
 	repeatRule := r.FormValue("repeat")

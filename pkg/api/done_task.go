@@ -13,9 +13,9 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", "POST")
 		w.WriteHeader(http.StatusMethodNotAllowed)
-		_, err := w.Write([]byte("405 Method Not Allowed"))
+		_, err := w.Write([]byte(http.StatusText(http.StatusMethodNotAllowed)))
 		if err != nil {
-			log.Println("failed write HTTP reply:", "405 Method Not Allowed")
+			log.Println("failed write HTTP reply:", http.StatusText(http.StatusMethodNotAllowed))
 		}
 		return
 	}

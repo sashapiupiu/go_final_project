@@ -45,7 +45,7 @@ func tasksHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusNotFound)
 		return
 	}
 
@@ -53,5 +53,5 @@ func tasksHandler(w http.ResponseWriter, r *http.Request) {
 
 	writeJSON(w, TasksResponse{
 		Tasks: tasks,
-	})
+	}, http.StatusOK)
 }

@@ -16,21 +16,21 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
 	if task.ID == "" {
 		writeJSON(w, ErrorResponse{
 			Error: "ID is required",
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
 	if task.Title == "" {
 		writeJSON(w, ErrorResponse{
 			Error: "title is required",
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -38,7 +38,7 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -46,9 +46,9 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusConflict)
 		return
 	}
 
-	writeJSON(w, map[string]string{})
+	writeJSON(w, map[string]string{}, http.StatusOK)
 }

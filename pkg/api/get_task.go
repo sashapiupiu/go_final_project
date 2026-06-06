@@ -12,7 +12,7 @@ func getTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if id == "" {
 		writeJSON(w, ErrorResponse{
 			Error: "id is empty",
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -20,9 +20,9 @@ func getTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusNotFound)
 		return
 	}
 
-	writeJSON(w, task)
+	writeJSON(w, task, http.StatusOK)
 }

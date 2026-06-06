@@ -24,7 +24,7 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if id == "" {
 		writeJSON(w, ErrorResponse{
 			Error: "id is empty",
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -32,12 +32,18 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusNotFound)
 		return
 	}
 
 	if task.Repeat == "" {
 		err = db.DeleteTask(id)
+		if err != nil {
+			writeJSON(w, ErrorResponse{
+				Error: err.Error(),
+			}, http.StatusConflict)
+			return
+		}
 	} else {
 		next, err := repeat.NextDate(
 			time.Now(),
@@ -47,19 +53,18 @@ func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			writeJSON(w, ErrorResponse{
 				Error: err.Error(),
-			})
+			}, http.StatusInternalServerError)
 			return
 		}
 
 		err = db.UpdateDate(next, id)
+		if err != nil {
+			writeJSON(w, ErrorResponse{
+				Error: err.Error(),
+			}, http.StatusConflict)
+			return
+		}
 	}
 
-	if err != nil {
-		writeJSON(w, ErrorResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-
-	writeJSON(w, map[string]string{})
+	writeJSON(w, map[string]string{}, http.StatusOK)
 }

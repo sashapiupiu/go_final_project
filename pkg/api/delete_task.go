@@ -12,7 +12,7 @@ func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if id == "" {
 		writeJSON(w, ErrorResponse{
 			Error: "id is empty",
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -20,9 +20,9 @@ func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusConflict)
 		return
 	}
 
-	writeJSON(w, map[string]string{})
+	writeJSON(w, map[string]string{}, http.StatusOK)
 }

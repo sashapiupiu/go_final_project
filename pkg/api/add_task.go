@@ -19,9 +19,10 @@ type IdResponse struct {
 	ID string `json:"id"`
 }
 
-func writeJSON(w http.ResponseWriter, data any) {
+func writeJSON(w http.ResponseWriter, data any, responseCode int) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	json.NewEncoder(w).Encode(data)
+w.WriteHeader(responseCode)
+	err := 	json.NewEncoder(w).Encode(data)
 }
 
 func afterNow(a, b time.Time) bool {
@@ -72,14 +73,14 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
 	if task.Title == "" {
 		writeJSON(w, ErrorResponse{
 			Error: "title is required",
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -87,7 +88,7 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusBadRequest)
 		return
 	}
 
@@ -95,11 +96,11 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		})
+		}, http.StatusConflict)
 		return
 	}
 
 	writeJSON(w, IdResponse{
 		ID: strconv.FormatInt(id, 10),
-	})
+	}, http.StatusCreated)
 }

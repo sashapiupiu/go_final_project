@@ -8,6 +8,14 @@ import (
 )
 
 func doneTaskHandler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		w.Header().Set("Allow", "POST")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("405 Method Not Allowed"))
+		return
+	}
+
 	id := r.URL.Query().Get("id")
 	if id == "" {
 		writeJSON(w, ErrorResponse{

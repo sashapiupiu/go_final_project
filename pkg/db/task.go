@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"go_final_project/pkg/consts"
 	"go_final_project/pkg/repeat"
 )
 
@@ -44,7 +45,7 @@ func Tasks(limit int) ([]*Task, error) {
 			return nil, err
 		}
 
-		taskDate, err := time.Parse("20060102", t.Date)
+		taskDate, err := time.Parse(consts.DateLayout, t.Date)
 		if err != nil {
 			continue
 		}

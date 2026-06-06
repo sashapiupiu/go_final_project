@@ -6,11 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	"go_final_project/pkg/consts"
 	"go_final_project/pkg/db"
 	"go_final_project/pkg/repeat"
 )
-
-const dateLayout = "20060102"
 
 type ErrorResponse struct {
 	Error string `json:"error"`
@@ -36,10 +35,10 @@ func checkDate(task *db.Task) error {
 	now := time.Now()
 
 	if task.Date == "" {
-		task.Date = now.Format(dateLayout)
+		task.Date = now.Format(consts.DateLayout)
 	}
 
-	t, err := time.Parse(dateLayout, task.Date)
+	t, err := time.Parse(consts.DateLayout, task.Date)
 	if err != nil {
 		return err
 	}
@@ -56,7 +55,7 @@ func checkDate(task *db.Task) error {
 	if afterNow(now, t) {
 
 		if task.Repeat == "" {
-			task.Date = now.Format(dateLayout)
+			task.Date = now.Format(consts.DateLayout)
 		} else {
 			task.Date = next
 		}

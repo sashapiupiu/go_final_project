@@ -4,17 +4,16 @@ import (
 	"net/http"
 	"time"
 
+	"go_final_project/pkg/consts"
 	"go_final_project/pkg/repeat"
 )
-
-const DateLayout = "20060102"
 
 func NextDateHandler(w http.ResponseWriter, r *http.Request) {
 	nowStr := r.FormValue("now")
 	date := r.FormValue("date")
 	repeatRule := r.FormValue("repeat")
 
-	now, err := time.Parse(DateLayout, nowStr)
+	now, err := time.Parse(consts.DateLayout, nowStr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

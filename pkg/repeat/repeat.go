@@ -2,12 +2,11 @@ package repeat
 
 import (
 	"errors"
+	"go_final_project/pkg/consts"
 	"strconv"
 	"strings"
 	"time"
 )
-
-const DateLayout = "20060102"
 
 func AfterNow(a, b time.Time) bool {
 	a = time.Date(a.Year(), a.Month(), a.Day(), 0, 0, 0, 0, a.Location())
@@ -17,7 +16,7 @@ func AfterNow(a, b time.Time) bool {
 }
 
 func NextDate(now time.Time, date string, repeat string) (string, error) {
-	t, err := time.Parse(DateLayout, date)
+	t, err := time.Parse(consts.DateLayout, date)
 	if err != nil {
 		return "", err
 	}
@@ -35,7 +34,7 @@ func NextDate(now time.Time, date string, repeat string) (string, error) {
 			}
 		}
 
-		return t.Format(DateLayout), nil
+		return t.Format(consts.DateLayout), nil
 	}
 
 	parts := strings.Fields(repeat)
@@ -65,5 +64,5 @@ func NextDate(now time.Time, date string, repeat string) (string, error) {
 		}
 	}
 
-	return t.Format(DateLayout), nil
+	return t.Format(consts.DateLayout), nil
 }

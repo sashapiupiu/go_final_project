@@ -46,7 +46,7 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, ErrorResponse{
 			Error: err.Error(),
-		}, http.StatusConflict)
+		}, http.StatusInternalServerError)
 		return
 	}
 
